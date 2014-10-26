@@ -42,6 +42,7 @@ module IrcMessageTypes
   NAMES_MATCHER = /(?<type>NAMES)( (?<channel>\S+))?/
   LIST_MATCHER = /(?<type>LIST)( (?<channel>\S+))?/
   INVITE_MATCHER = /(:(?<user>\S+) )?(?<type>INVITE) (?<to_user>\S+) (?<channel>\S+)/
+  KICK_MATCHER = /(:(?<user>\S+) )?(?<type>KICK) (?<channel>\S+) (?<to_user>\S+)( :(?<message>.*))?/
 
   PRIVMSG_MATCHER = /(:(?<user>\S+) )?(?<type>PRIVMSG) (?<to_user>\S+) :(?<message>.+)/
   NOTICE_MATCHER = /(:(?<user>\S+) )?(?<type>NOTICE) (?<to_user>\S+) :(?<message>.+)/
