@@ -153,10 +153,10 @@ class IrcMessageTest < Minitest::Test
     assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ', :operator => '-', :mode => 'w'
 
     message = ':Angel MODE Angel +i'
-    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :to_user => 'Angel', :operator => '+', :mode => 'i'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :recipient => 'Angel', :operator => '+', :mode => 'i'
 
     message = 'MODE WiZ -o'
-    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'WiZ', :operator => '-', :mode => 'o'
+    assert_irc_message_contains IrcMessage.parse(message), :recipient => 'WiZ', :operator => '-', :mode => 'o'
 
     # TOPIC
 
@@ -190,77 +190,77 @@ class IrcMessageTest < Minitest::Test
 
     # INVITE
     message = ':Angel INVITE Wiz #Dust'
-    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :to_user => 'Wiz', :channel => '#Dust'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :recipient => 'Wiz', :channel => '#Dust'
 
     message = 'INVITE Wiz #Twilight_Zone'
-    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'Wiz', :channel => '#Twilight_Zone'
+    assert_irc_message_contains IrcMessage.parse(message), :recipient => 'Wiz', :channel => '#Twilight_Zone'
 
     message = ':Angel!wings@irc.org INVITE Wiz #Dust'
-    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel!wings@irc.org', :to_user => 'Wiz', :channel => '#Dust'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel!wings@irc.org', :recipient => 'Wiz', :channel => '#Dust'
 
     # KICK
 
     message = 'KICK &Melbourne Matthew'
-    assert_irc_message_contains IrcMessage.parse(message), :channel => '&Melbourne', :to_user => 'Matthew' 
+    assert_irc_message_contains IrcMessage.parse(message), :channel => '&Melbourne', :recipient => 'Matthew' 
 
     message = 'KICK #Finnish John :Speaking English'
-    assert_irc_message_contains IrcMessage.parse(message), :channel => '#Finnish', :to_user => 'John', :message => 'Speaking English'
+    assert_irc_message_contains IrcMessage.parse(message), :channel => '#Finnish', :recipient => 'John', :message => 'Speaking English'
 
     message = ':WiZ KICK #Finnish John'
-    assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ', :channel => '#Finnish', :to_user => 'John'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ', :channel => '#Finnish', :recipient => 'John'
     
     message = ':WiZ!jto@tolsun.oulu.fi KICK #Finnish John'
-    assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ!jto@tolsun.oulu.fi', :channel => '#Finnish', :to_user => 'John'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ!jto@tolsun.oulu.fi', :channel => '#Finnish', :recipient => 'John'
 
     # PRIVMSG
     message = ":Angel PRIVMSG Wiz :Hello are you receiving this message ?"
-    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :to_user => 'Wiz', :message => 'Hello are you receiving this message ?'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :recipient => 'Wiz', :message => 'Hello are you receiving this message ?'
 
     message = "PRIVMSG Angel :yes I'm receiving it !"
-    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :to_user => 'Angel', :message => "yes I'm receiving it !"
+    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :recipient => 'Angel', :message => "yes I'm receiving it !"
     
     message = "PRIVMSG jto@tolsun.oulu.fi :Hello !"
-    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :to_user => 'jto@tolsun.oulu.fi', :message => 'Hello !'
+    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :recipient => 'jto@tolsun.oulu.fi', :message => 'Hello !'
     
     message = "PRIVMSG $*.fi :Server tolsun.oulu.fi rebooting."
-    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :to_user => '$*.fi', :message => 'Server tolsun.oulu.fi rebooting.'
+    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :recipient => '$*.fi', :message => 'Server tolsun.oulu.fi rebooting.'
 
     message = "PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions"
-    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :to_user => '#*.edu', :message => 'NSFNet is undergoing work, expect interruptions'
+    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :recipient => '#*.edu', :message => 'NSFNet is undergoing work, expect interruptions'
 
     message = 'PRIVMSG kalt%millennium.stealth.net@irc.stealth.net :Are you a frog?'
-    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'kalt%millennium.stealth.net@irc.stealth.net', :message => 'Are you a frog?'
+    assert_irc_message_contains IrcMessage.parse(message), :recipient => 'kalt%millennium.stealth.net@irc.stealth.net', :message => 'Are you a frog?'
 
     message = 'PRIVMSG kalt%millennium.stealth.net :Do you like cheese?'
-    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'kalt%millennium.stealth.net', :message => 'Do you like cheese?'
+    assert_irc_message_contains IrcMessage.parse(message), :recipient => 'kalt%millennium.stealth.net', :message => 'Do you like cheese?'
 
     message = 'PRIVMSG Wiz!jto@tolsun.oulu.fi :Hello !'
-    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'Wiz!jto@tolsun.oulu.fi', :message => 'Hello !'
+    assert_irc_message_contains IrcMessage.parse(message), :recipient => 'Wiz!jto@tolsun.oulu.fi', :message => 'Hello !'
 
     # NOTICE
     message = ":Angel NOTICE Wiz :Hello are you receiving this message ?"
-    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :to_user => 'Wiz', :message => 'Hello are you receiving this message ?'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :recipient => 'Wiz', :message => 'Hello are you receiving this message ?'
 
     message = "NOTICE Angel :yes I'm receiving it !"
-    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :to_user => 'Angel', :message => "yes I'm receiving it !"
+    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :recipient => 'Angel', :message => "yes I'm receiving it !"
     
     message = "NOTICE jto@tolsun.oulu.fi :Hello !"
-    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :to_user => 'jto@tolsun.oulu.fi', :message => 'Hello !'
+    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :recipient => 'jto@tolsun.oulu.fi', :message => 'Hello !'
 
     message = "NOTICE $*.fi :Server tolsun.oulu.fi rebooting."
-    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :to_user => '$*.fi', :message => 'Server tolsun.oulu.fi rebooting.'
+    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :recipient => '$*.fi', :message => 'Server tolsun.oulu.fi rebooting.'
 
     message = "NOTICE #*.edu :NSFNet is undergoing work, expect interruptions"
-    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :to_user => '#*.edu', :message => 'NSFNet is undergoing work, expect interruptions'
+    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :recipient => '#*.edu', :message => 'NSFNet is undergoing work, expect interruptions'
 
     message = 'NOTICE kalt%millennium.stealth.net@irc.stealth.net :Are you a frog?'
-    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'kalt%millennium.stealth.net@irc.stealth.net', :message => 'Are you a frog?'
+    assert_irc_message_contains IrcMessage.parse(message), :recipient => 'kalt%millennium.stealth.net@irc.stealth.net', :message => 'Are you a frog?'
 
     message = 'NOTICE kalt%millennium.stealth.net :Do you like cheese?'
-    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'kalt%millennium.stealth.net', :message => 'Do you like cheese?'
+    assert_irc_message_contains IrcMessage.parse(message), :recipient => 'kalt%millennium.stealth.net', :message => 'Do you like cheese?'
 
     message = 'NOTICE Wiz!jto@tolsun.oulu.fi :Hello !'
-    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'Wiz!jto@tolsun.oulu.fi', :message => 'Hello !'
+    assert_irc_message_contains IrcMessage.parse(message), :recipient => 'Wiz!jto@tolsun.oulu.fi', :message => 'Hello !'
 
     # VERSION
 
