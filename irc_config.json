@@ -1,0 +1,28 @@
+{
+  "nick_name": "rubybottesting",
+  "user_name": "rubybottesting",
+  "real_name": "Ruby Bot testing",
+  "host_name": 8,
+  "server_name": "*",
+  "pass": "*",
+  "remote_servers": [
+    {
+      "server_ref": "freenode",
+      "server_address": "holmes.freenode.net",
+      "port": 6667,
+      "plugins": [
+        "ToolsPlugin",
+        "ConsoleLoggerPlugin"
+      ]
+    },
+    {
+      "server_ref": "efnet",
+      "server_address": "irc.du.se",
+      "port": 6667,
+      "plugins": [
+        "ToolsPlugin",
+        "ConsoleLoggerPlugin"
+      ]
+    }
+  ]
+}
