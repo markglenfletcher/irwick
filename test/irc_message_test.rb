@@ -31,6 +31,7 @@ class IrcMessageTest < Minitest::Test
   #     :WALLOPS => [":csd.bu.edu WALLOPS :Connect '*.uiuc.edu 6667' from Joshua"],
   #     :USERHOST => ['USERHOST Wiz Michael Marty p'],
   #     :ISON => ['ISON phone trillian WiZ jarlek Avalon Angel Monstah']
+  #     :SERVICE => ['SERVICE dict * *.fr 0 0 :French Dictionary']
   #   }.each do |k,v|
   #     v.each { |m| assert_equal k, IrcMessage.classify(m) }
   #   end
@@ -56,6 +57,9 @@ class IrcMessageTest < Minitest::Test
     message = 'NICK nick'
     assert_irc_message_contains IrcMessage.parse(message), :nickname => 'nick'
 
+    message = ':WiZ!jto@tolsun.oulu.fi NICK Kilroy'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ!jto@tolsun.oulu.fi', :nickname => 'Kilroy'
+
     # USER
 
     message = 'USER guest tolmoon tolsun :Ronnie Reagan'
@@ -78,6 +82,9 @@ class IrcMessageTest < Minitest::Test
     # QUIT
     message = 'QUIT :Gone to have lunch'
     assert_irc_message_contains IrcMessage.parse(message), :message => 'Gone to have lunch'
+
+    message = ':syrk!kalt@millennium.stealth.net QUIT :Gone to have lunch'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'syrk!kalt@millennium.stealth.net', :message => 'Gone to have lunch'
 
     # SQUIT 
     message = 'SQUIT tolsun.oulu.fi :Bad Link ?'
@@ -106,6 +113,9 @@ class IrcMessageTest < Minitest::Test
     message = ':WiZ JOIN #Twilight_zone'
     assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ', :channel => '#Twilight_zone'
 
+    message = ':WiZ!jto@tolsun.oulu.fi JOIN #Twilight_zone'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ!jto@tolsun.oulu.fi', :channel => '#Twilight_zone'
+
     # PART
 
     message = 'PART #twilight_zone'
@@ -113,6 +123,9 @@ class IrcMessageTest < Minitest::Test
 
     message = 'PART #oz-ops,&group5'
     assert_irc_message_contains IrcMessage.parse(message), :channel => '#oz-ops,&group5'
+
+    message = ':WiZ!jto@tolsun.oulu.fi PART #playzone :I lost'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ!jto@tolsun.oulu.fi', :channel => '#playzone', :message => 'I lost'
 
     # MODE Channel
 
@@ -137,6 +150,9 @@ class IrcMessageTest < Minitest::Test
     message = 'MODE &oulu +b *!*@*.edu'
     assert_irc_message_contains IrcMessage.parse(message), :channel => '&oulu', :operator => '+', :mode => 'b', :banmask => '*!*@*.edu'
     
+    message = ':WiZ!jto@tolsun.oulu.fi MODE #eu-opers -l'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ!jto@tolsun.oulu.fi', :channel => '#eu-opers', :operator => '-', :mode => 'l'
+
     # MODE User
 
     message = ':WiZ MODE -w'
