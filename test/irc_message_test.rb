@@ -3,7 +3,6 @@ require_relative 'test_helper'
 class IrcMessageTest < Minitest::Test
   # def test_message_factory_should_correctly_classify_messages
   #   {
-  #     :VERSION => [':Wiz VERSION *.se','VERSION tolsun.oulu.fi'],
   #     :STATS => ['STATS m',':Wiz STATS c eff.org'],
   #     :LINKS => ['LINKS *.au','LINKS *.bu.edu *.edu'],
   #     :TIME => ['TIME tolsun.oulu.fi',':Angel TIME *.au'],
@@ -229,6 +228,15 @@ class IrcMessageTest < Minitest::Test
     message = "PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions"
     assert_irc_message_contains IrcMessage.parse(message), :user => nil, :to_user => '#*.edu', :message => 'NSFNet is undergoing work, expect interruptions'
 
+    message = 'PRIVMSG kalt%millennium.stealth.net@irc.stealth.net :Are you a frog?'
+    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'kalt%millennium.stealth.net@irc.stealth.net', :message => 'Are you a frog?'
+
+    message = 'PRIVMSG kalt%millennium.stealth.net :Do you like cheese?'
+    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'kalt%millennium.stealth.net', :message => 'Do you like cheese?'
+
+    message = 'PRIVMSG Wiz!jto@tolsun.oulu.fi :Hello !'
+    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'Wiz!jto@tolsun.oulu.fi', :message => 'Hello !'
+
     # NOTICE
     message = ":Angel NOTICE Wiz :Hello are you receiving this message ?"
     assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :to_user => 'Wiz', :message => 'Hello are you receiving this message ?'
@@ -244,6 +252,15 @@ class IrcMessageTest < Minitest::Test
 
     message = "NOTICE #*.edu :NSFNet is undergoing work, expect interruptions"
     assert_irc_message_contains IrcMessage.parse(message), :user => nil, :to_user => '#*.edu', :message => 'NSFNet is undergoing work, expect interruptions'
+
+    message = 'NOTICE kalt%millennium.stealth.net@irc.stealth.net :Are you a frog?'
+    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'kalt%millennium.stealth.net@irc.stealth.net', :message => 'Are you a frog?'
+
+    message = 'NOTICE kalt%millennium.stealth.net :Do you like cheese?'
+    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'kalt%millennium.stealth.net', :message => 'Do you like cheese?'
+
+    message = 'NOTICE Wiz!jto@tolsun.oulu.fi :Hello !'
+    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'Wiz!jto@tolsun.oulu.fi', :message => 'Hello !'
 
     # VERSION
 
