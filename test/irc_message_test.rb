@@ -267,6 +267,13 @@ class IrcMessageTest < Minitest::Test
     message = 'MOTD'
     assert_irc_message_contains IrcMessage.parse(message), :type => :motd
 
+    # STATS
+    message = 'STATS m'
+    assert_irc_message_contains IrcMessage.parse(message), :type => :stats, :query => 'm'
+
+    message = ':Wiz STATS c eff.org'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'Wiz', :query => 'c', :target => 'eff.org'
+
     # VERSION
 
     message = ':Wiz VERSION *.se'
