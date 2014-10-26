@@ -3,8 +3,6 @@ require_relative 'test_helper'
 class IrcMessageTest < Minitest::Test
   # def test_message_factory_should_correctly_classify_messages
   #   {
-
-  #     :KICK =>  ['KICK &Melbourne Matthew','KICK #Finnish John :Speaking English',':WiZ KICK #Finnish John'],
   #     :VERSION => [':Wiz VERSION *.se','VERSION tolsun.oulu.fi'],
   #     :STATS => ['STATS m',':Wiz STATS c eff.org'],
   #     :LINKS => ['LINKS *.au','LINKS *.bu.edu *.edu'],
@@ -246,6 +244,14 @@ class IrcMessageTest < Minitest::Test
 
     message = "NOTICE #*.edu :NSFNet is undergoing work, expect interruptions"
     assert_irc_message_contains IrcMessage.parse(message), :user => nil, :to_user => '#*.edu', :message => 'NSFNet is undergoing work, expect interruptions'
+
+    # VERSION
+
+    message = ':Wiz VERSION *.se'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'Wiz', :target => '*.se'
+
+    message = 'VERSION tolsun.oulu.fi'
+    assert_irc_message_contains IrcMessage.parse(message), :target => 'tolsun.oulu.fi'
 
     # PING
     message = 'PING tolsun.oulu.fi'
