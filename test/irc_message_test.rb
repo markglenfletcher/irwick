@@ -262,6 +262,11 @@ class IrcMessageTest < Minitest::Test
     message = 'NOTICE Wiz!jto@tolsun.oulu.fi :Hello !'
     assert_irc_message_contains IrcMessage.parse(message), :recipient => 'Wiz!jto@tolsun.oulu.fi', :message => 'Hello !'
 
+    # MOTD
+
+    message = 'MOTD'
+    assert_irc_message_contains IrcMessage.parse(message), :type => :motd
+
     # VERSION
 
     message = ':Wiz VERSION *.se'
