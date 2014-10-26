@@ -40,6 +40,7 @@ module IrcMessageTypes
   USER_MODE_MATCHER = /(:(?<user>\S+) )?(?<type>MODE)( (?<to_user>\S+))? (?<operator>[+|-]{1})(?<mode>\w{1})/
   TOPIC_MATCHER = /(:(?<user>\S+) )?(?<type>TOPIC) (?<channel>\S+)( :(?<topic>.*+))?/
   NAMES_MATCHER = /(?<type>NAMES)( (?<channel>\S+))?/
+  LIST_MATCHER = /(?<type>LIST)( (?<channel>\S+))?/
 
   PRIVMSG_MATCHER = /(:(?<user>\S+) )?(?<type>PRIVMSG) (?<to_user>\S+) :(?<message>.+)/
   NOTICE_MATCHER = /(:(?<user>\S+) )?(?<type>NOTICE) (?<to_user>\S+) :(?<message>.+)/
