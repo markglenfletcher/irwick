@@ -191,6 +191,16 @@ class IrcMessageTest < Minitest::Test
     message = 'LIST #twilight_zone,#42'
     assert_irc_message_contains IrcMessage.parse(message), :channel => '#twilight_zone,#42'
 
+    # INVITE
+    message = ':Angel INVITE Wiz #Dust'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :to_user => 'Wiz', :channel => '#Dust'
+
+    message = 'INVITE Wiz #Twilight_Zone'
+    assert_irc_message_contains IrcMessage.parse(message), :to_user => 'Wiz', :channel => '#Twilight_Zone'
+
+    message = ':Angel!wings@irc.org INVITE Wiz #Dust'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel!wings@irc.org', :to_user => 'Wiz', :channel => '#Dust'
+
     # PRIVMSG
     message = ":Angel PRIVMSG Wiz :Hello are you receiving this message ?"
     assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :to_user => 'Wiz', :message => 'Hello are you receiving this message ?'
