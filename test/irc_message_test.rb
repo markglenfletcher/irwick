@@ -3,7 +3,6 @@ require_relative 'test_helper'
 class IrcMessageTest < Minitest::Test
   # def test_message_factory_should_correctly_classify_messages
   #   {
-  #     :TOPIC => [':Wiz TOPIC #test :New topic','TOPIC #test :another topic','TOPIC #test'],
   #     :NAMES => ['NAMES #twilight_zone,#42','NAMES'],
   #     :LIST => ['LIST','LIST #twilight_zone,#42'],
   #     :INVITE => [':Angel INVITE Wiz #Dust','INVITE Wiz #Twilight_Zone'],
@@ -177,6 +176,14 @@ class IrcMessageTest < Minitest::Test
 
     message = 'TOPIC #test'
     assert_irc_message_contains IrcMessage.parse(message), :channel => '#test'    
+
+    # NAMES
+
+    message = 'NAMES #twilight_zone,#42'
+    assert_irc_message_contains IrcMessage.parse(message), :channel => '#twilight_zone,#42'
+
+    message = 'NAMES'
+    assert_irc_message_contains IrcMessage.parse(message), :type => :names, :channel => nil
 
     # PRIVMSG
     message = ":Angel PRIVMSG Wiz :Hello are you receiving this message ?"
