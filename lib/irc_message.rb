@@ -48,6 +48,7 @@ module IrcMessageTypes
   MOTD_MATCHER = /(?<type>MOTD)/
   VERSION_MATCHER = /(:(?<user>\S+) )?(?<type>VERSION) (?<target>\S+)/
   STATS_MATCHER = /(:(?<user>\S+) )?(?<type>STATS) (?<query>\S{1})( (?<target>\S+))?/
+  LINKS_MATCHER = /(?<type>LINKS)( (?<remoteserver>\S+))? (?<servermask>\S+)/
 
   PING_MATCHER = /(?<type>PING) (?<server>.*)/
 end
