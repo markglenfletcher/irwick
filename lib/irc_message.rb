@@ -43,9 +43,10 @@ module IrcMessageTypes
   LIST_MATCHER = /(?<type>LIST)( (?<channel>\S+))?/
   INVITE_MATCHER = /(:(?<user>\S+) )?(?<type>INVITE) (?<to_user>\S+) (?<channel>\S+)/
   KICK_MATCHER = /(:(?<user>\S+) )?(?<type>KICK) (?<channel>\S+) (?<to_user>\S+)( :(?<message>.*))?/
-
   PRIVMSG_MATCHER = /(:(?<user>\S+) )?(?<type>PRIVMSG) (?<to_user>\S+) :(?<message>.+)/
   NOTICE_MATCHER = /(:(?<user>\S+) )?(?<type>NOTICE) (?<to_user>\S+) :(?<message>.+)/
+
+  VERSION_MATCHER = /(:(?<user>\S+) )?(?<type>VERSION) (?<target>\S+)/
 
   PING_MATCHER = /(?<type>PING) (?<server>.*)/
 end
