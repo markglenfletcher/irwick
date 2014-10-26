@@ -45,7 +45,7 @@ module IrcMessageTypes
   KICK_MATCHER = /(:(?<user>\S+) )?(?<type>KICK) (?<channel>\S+) (?<recipient>\S+)( :(?<message>.*))?/
   PRIVMSG_MATCHER = /(:(?<user>\S+) )?(?<type>PRIVMSG) (?<recipient>\S+) :(?<message>.+)/
   NOTICE_MATCHER = /(:(?<user>\S+) )?(?<type>NOTICE) (?<recipient>\S+) :(?<message>.+)/
-
+  MOTD_MATCHER = /(?<type>MOTD)/
   VERSION_MATCHER = /(:(?<user>\S+) )?(?<type>VERSION) (?<target>\S+)/
 
   PING_MATCHER = /(?<type>PING) (?<server>.*)/
