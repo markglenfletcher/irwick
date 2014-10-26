@@ -148,6 +148,20 @@ class IrcMessageTest < Minitest::Test
     message = 'MODE WiZ -o'
     assert_irc_message_contains IrcMessage.parse(message), :to_user => 'WiZ', :operator => '-', :mode => 'o'
 
+    # TOPIC
+
+    message = ':WiZ!jto@tolsun.oulu.fi TOPIC #test :New topic'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ!jto@tolsun.oulu.fi', :channel => '#test', :topic => 'New topic'
+    
+    message = 'TOPIC #test :another topic'
+    assert_irc_message_contains IrcMessage.parse(message), :user => nil, :channel => '#test', :topic => 'another topic'
+
+    message = 'TOPIC #test :'
+    assert_irc_message_contains IrcMessage.parse(message), :channel => '#test', :topic => ''
+
+    message = 'TOPIC #test'
+    assert_irc_message_contains IrcMessage.parse(message), :channel => '#test'    
+
     # PRIVMSG
     message = ":Angel PRIVMSG Wiz :Hello are you receiving this message ?"
     assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :to_user => 'Wiz', :message => 'Hello are you receiving this message ?'
