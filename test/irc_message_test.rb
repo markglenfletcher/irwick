@@ -3,7 +3,7 @@ require_relative 'test_helper'
 class IrcMessageTest < Minitest::Test
   # def test_message_factory_should_correctly_classify_messages
   #   {
-  #     :INVITE => [':Angel INVITE Wiz #Dust','INVITE Wiz #Twilight_Zone'],
+
   #     :KICK =>  ['KICK &Melbourne Matthew','KICK #Finnish John :Speaking English',':WiZ KICK #Finnish John'],
   #     :VERSION => [':Wiz VERSION *.se','VERSION tolsun.oulu.fi'],
   #     :STATS => ['STATS m',':Wiz STATS c eff.org'],
@@ -200,6 +200,20 @@ class IrcMessageTest < Minitest::Test
 
     message = ':Angel!wings@irc.org INVITE Wiz #Dust'
     assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel!wings@irc.org', :to_user => 'Wiz', :channel => '#Dust'
+
+    # KICK
+
+    message = 'KICK &Melbourne Matthew'
+    assert_irc_message_contains IrcMessage.parse(message), :channel => '&Melbourne', :to_user => 'Matthew' 
+
+    message = 'KICK #Finnish John :Speaking English'
+    assert_irc_message_contains IrcMessage.parse(message), :channel => '#Finnish', :to_user => 'John', :message => 'Speaking English'
+
+    message = ':WiZ KICK #Finnish John'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ', :channel => '#Finnish', :to_user => 'John'
+    
+    message = ':WiZ!jto@tolsun.oulu.fi KICK #Finnish John'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ!jto@tolsun.oulu.fi', :channel => '#Finnish', :to_user => 'John'
 
     # PRIVMSG
     message = ":Angel PRIVMSG Wiz :Hello are you receiving this message ?"
