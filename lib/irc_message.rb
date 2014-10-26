@@ -47,6 +47,7 @@ module IrcMessageTypes
   NOTICE_MATCHER = /(:(?<user>\S+) )?(?<type>NOTICE) (?<recipient>\S+) :(?<message>.+)/
   MOTD_MATCHER = /(?<type>MOTD)/
   VERSION_MATCHER = /(:(?<user>\S+) )?(?<type>VERSION) (?<target>\S+)/
+  STATS_MATCHER = /(:(?<user>\S+) )?(?<type>STATS) (?<query>\S{1})( (?<target>\S+))?/
 
   PING_MATCHER = /(?<type>PING) (?<server>.*)/
 end
