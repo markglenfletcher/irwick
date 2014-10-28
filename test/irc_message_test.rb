@@ -3,7 +3,6 @@ require_relative 'test_helper'
 class IrcMessageTest < Minitest::Test
   # def test_message_factory_should_correctly_classify_messages
   #   {
-  #     :LINKS => ['LINKS *.au','LINKS *.bu.edu *.edu'],
   #     :TIME => ['TIME tolsun.oulu.fi',':Angel TIME *.au'],
   #     :CONNECT => ['CONNECT tolsun.oulu.fi',':WiZ CONNECT eff.org 6667 csd.bu.edu'],
   #     :TRACE => ['TRACE *.oulu.fi',':WiZ TRACE AngelDust'],
@@ -288,6 +287,14 @@ class IrcMessageTest < Minitest::Test
 
     message = 'LINKS *.bu.edu *.edu'
     assert_irc_message_contains IrcMessage.parse(message), :remoteserver => '*.bu.edu', :servermask => '*.edu'
+
+    # TIME
+
+    message = 'TIME tolsun.oulu.fi'
+    assert_irc_message_contains IrcMessage.parse(message), :target => 'tolsun.oulu.fi'
+    
+    message = ':Angel TIME *.au'
+    assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :target => '*.au'
 
     # PING
     message = 'PING tolsun.oulu.fi'
