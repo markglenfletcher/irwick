@@ -74,5 +74,7 @@ module IrcMessageTypes
   WHOWAS_MATCHER = /(?<type>WHOWAS) (?<nickname>\S+)( (?<count>\d+))?( (?<target>\S+))?/
   WHOIS_MATCHER = /(?<type>WHOIS) (?<target>\S+)( (?<mask>\S+))?/
   WHO_MATCHER = /(?<type>WHO)( (?<mask>\S+))?( (?<o>[o]{1}))?/
+  KILL_MATCHER = /(?<type>KILL) (?<nickname>\S+) (?<comment>.*)/
   PING_MATCHER = /(?<type>PING) (?<server>.*)/
+  PONG_MATCHER = /(?<type>PONG)( (?<daemon>.*))?/
 end

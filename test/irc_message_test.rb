@@ -3,9 +3,6 @@ require_relative 'test_helper'
 class IrcMessageTest < Minitest::Test
   # def test_message_factory_should_correctly_classify_messages
   #   {
-  #     :KILL => ['KILL David (csd.bu.edu <- tolsun.oulu.fi)'],
-  #     :PING => ['PING tolsun.oulu.fi','PING WiZ'],
-  #     :PONG => ['PONG csd.bu.edu tolsun.oulu.fi'],
   #     :ERROR => ['ERROR :Server *.fi already exists'],
   #     :AWAY => ['AWAY :Gone to lunch.  Back in 5', ':WiZ AWAY'],
   #     :REHASH => ['REHASH'],
@@ -362,12 +359,26 @@ class IrcMessageTest < Minitest::Test
     message = 'WHOWAS Trillian 1 *.edu'
     assert_irc_message_contains IrcMessage.parse(message), :nickname => 'Trillian', :count => '1', :target => '*.edu'
 
+    # KILL
+    message = 'KILL David (csd.bu.edu <- tolsun.oulu.fi)'
+    assert_irc_message_contains IrcMessage.parse(message), :type => :kill, :nickname => 'David', :comment => '(csd.bu.edu <- tolsun.oulu.fi)'
+
     # PING
     message = 'PING tolsun.oulu.fi'
     assert_irc_message_contains IrcMessage.parse(message), :server => 'tolsun.oulu.fi'
 
     message = 'PING WiZ'
     assert_irc_message_contains IrcMessage.parse(message), :server => 'WiZ'
+  
+    # PONG
+    message = 'PONG'
+    assert_irc_message_contains IrcMessage.parse(message), :type => :pong
+
+    message = 'PONG csd.bu.edu'
+    assert_irc_message_contains IrcMessage.parse(message), :daemon => 'csd.bu.edu'
+
+    message = 'PONG csd.bu.edu tolsun.oulu.fi'
+    assert_irc_message_contains IrcMessage.parse(message), :daemon => 'csd.bu.edu tolsun.oulu.fi'
   end
 
   def test_validates_message_recognises_valid_message
