@@ -66,6 +66,7 @@ module IrcMessageTypes
   STATS_MATCHER = /(:(?<user>\S+) )?(?<type>STATS) (?<query>\S{1})( (?<target>\S+))?/
   LINKS_MATCHER = /(?<type>LINKS)( (?<remoteserver>\S+))? (?<servermask>\S+)/
   TIME_MATCHER = /(:(?<user>\S+) )?(?<type>TIME) (?<target>\S+)/
+  CONNECT_MATCHER = /(:(?<user>\S+) )?(?<type>CONNECT) (?<target>\S+)( (?<port>\d+))?( (?<remoteserver>\S+))?/
 
   PING_MATCHER = /(?<type>PING) (?<server>.*)/
 end
