@@ -81,4 +81,5 @@ module IrcMessageTypes
   AWAY_MATCHER = /(:(?<user>\S+) )?(?<type>AWAY)( :(?<message>.*))?/
   REHASH_MATCHER = /(?<type>REHASH)/
   RESTART_MATCHER = /(?<type>RESTART)/
+  SUMMON_MATCHER = /(?<type>SUMMON) (?<recipient>\S+)( (?<target>\S+))?/
 end
