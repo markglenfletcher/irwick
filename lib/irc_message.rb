@@ -70,6 +70,7 @@ module IrcMessageTypes
   TRACE_MATCHER = /(:(?<user>\S+) )?(?<type>TRACE) (?<target>\S+)/
   ADMIN_MATCHER = /(?<type>ADMIN) (?<target>\S+)/
   INFO_MATCHER = /(:(?<user>\S+) )?(?<type>INFO) (?<target>\S+)/
+  SQUERY_MATCHER = /(?<type>SQUERY)( (?<service>\S+))?( :(?<message>.*))?/
 
   WHOIS_MATCHER = /(?<type>WHOIS) (?<target>\S+)( (?<mask>\S+))?/
   PING_MATCHER = /(?<type>PING) (?<server>.*)/

@@ -328,6 +328,14 @@ class IrcMessageTest < Minitest::Test
     message = 'INFO Angel'
     assert_irc_message_contains IrcMessage.parse(message), :target => 'Angel'
 
+    # SQUERY
+
+    message = 'SQUERY irchelp :HELP privmsg'
+    assert_irc_message_contains IrcMessage.parse(message), :service => 'irchelp', :message => 'HELP privmsg'
+
+    message = 'SQUERY dict@irc.fr :fr2en blaireau'
+    assert_irc_message_contains IrcMessage.parse(message), :service => 'dict@irc.fr', :message => 'fr2en blaireau'
+
     # WHOIS
 
     message = 'WHOIS wiz'
