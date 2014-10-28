@@ -26,9 +26,9 @@ class IrcBot
   end
 
   def notify_plugins(message)
-    plugins.map do |plugin|
+    plugins.flat_map do |plugin|
       notify_plugin plugin, message
-    end.flatten
+    end
   end
 
   private
