@@ -84,4 +84,5 @@ module IrcMessageTypes
   SUMMON_MATCHER = /(?<type>SUMMON) (?<recipient>\S+)( (?<target>\S+))?/
   USERS_MATCHER = /(:(?<user>\S+) )?(?<type>USERS) (?<target>\S+)/
   WALLOPS_MATCHER = /(:(?<user>\S+) )?(?<type>WALLOPS)( :(?<message>.*))?/
+  USERHOST_MATCHER = /(?<type>USERHOST) (?<nickname>.*)/
 end

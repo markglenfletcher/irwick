@@ -3,7 +3,6 @@ require_relative 'test_helper'
 class IrcMessageTest < Minitest::Test
   # def test_message_factory_should_correctly_classify_messages
   #   {
-  #     :USERHOST => ['USERHOST Wiz Michael Marty p'],
   #     :ISON => ['ISON phone trillian WiZ jarlek Avalon Angel Monstah']
   #     :SERVICE => ['SERVICE dict * *.fr 0 0 :French Dictionary']
   #   }.each do |k,v|
@@ -409,6 +408,13 @@ class IrcMessageTest < Minitest::Test
     # WALLOPS
     message = ":csd.bu.edu WALLOPS :Connect '*.uiuc.edu 6667' from Joshua"
     assert_irc_message_contains IrcMessage.parse(message), :user => 'csd.bu.edu', :message => "Connect '*.uiuc.edu 6667' from Joshua"
+
+    # USERHOST
+    message = 'USERHOST Wiz'
+    assert_irc_message_contains IrcMessage.parse(message), :nickname => 'Wiz'
+
+    message = 'USERHOST Wiz Michael Marty p'
+    assert_irc_message_contains IrcMessage.parse(message), :nickname => 'Wiz Michael Marty p'
   end
 
   def test_validates_message_recognises_valid_message
