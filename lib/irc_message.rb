@@ -77,4 +77,5 @@ module IrcMessageTypes
   KILL_MATCHER = /(?<type>KILL) (?<nickname>\S+) (?<comment>.*)/
   PING_MATCHER = /(?<type>PING) (?<server>.*)/
   PONG_MATCHER = /(?<type>PONG)( (?<daemon>.*))?/
+  ERROR_MATCHER = /(?<type>ERROR) :(?<message>.*)/
 end
