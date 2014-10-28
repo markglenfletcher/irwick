@@ -79,4 +79,6 @@ module IrcMessageTypes
   PONG_MATCHER = /(?<type>PONG)( (?<daemon>.*))?/
   ERROR_MATCHER = /(?<type>ERROR) :(?<message>.*)/
   AWAY_MATCHER = /(:(?<user>\S+) )?(?<type>AWAY)( :(?<message>.*))?/
+  REHASH_MATCHER = /(?<type>REHASH)/
+  RESTART_MATCHER = /(?<type>RESTART)/
 end
