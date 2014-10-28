@@ -328,6 +328,9 @@ class IrcMessageTest < Minitest::Test
     message = 'INFO Angel'
     assert_irc_message_contains IrcMessage.parse(message), :target => 'Angel'
 
+    # SERVLIST
+    # TODO
+
     # SQUERY
 
     message = 'SQUERY irchelp :HELP privmsg'
