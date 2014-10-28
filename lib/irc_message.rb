@@ -69,6 +69,7 @@ module IrcMessageTypes
   CONNECT_MATCHER = /(:(?<user>\S+) )?(?<type>CONNECT) (?<target>\S+)( (?<port>\d+))?( (?<remoteserver>\S+))?/
   TRACE_MATCHER = /(:(?<user>\S+) )?(?<type>TRACE) (?<target>\S+)/
   ADMIN_MATCHER = /(?<type>ADMIN) (?<target>\S+)/
+  INFO_MATCHER = /(:(?<user>\S+) )?(?<type>INFO) (?<target>\S+)/
 
   PING_MATCHER = /(?<type>PING) (?<server>.*)/
 end
