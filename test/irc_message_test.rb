@@ -1,15 +1,6 @@
 require_relative 'test_helper'
 
 class IrcMessageTest < Minitest::Test
-  # def test_message_factory_should_correctly_classify_messages
-  #   {
-  #     :ISON => ['ISON phone trillian WiZ jarlek Avalon Angel Monstah']
-  #     :SERVICE => ['SERVICE dict * *.fr 0 0 :French Dictionary']
-  #   }.each do |k,v|
-  #     v.each { |m| assert_equal k, IrcMessage.classify(m) }
-  #   end
-  # end
-
   def test_method_symbol_is_correct
     assert_equal 'on_privmsg_messages', IrcMessage.new(":Angel PRIVMSG Wiz :Hello are you receiving this message ?").method_symbol
   end
@@ -415,6 +406,13 @@ class IrcMessageTest < Minitest::Test
 
     message = 'USERHOST Wiz Michael Marty p'
     assert_irc_message_contains IrcMessage.parse(message), :nickname => 'Wiz Michael Marty p'
+  
+    # ISON
+    message = 'ISON phone'
+    assert_irc_message_contains IrcMessage.parse(message), :nickname => 'phone'
+
+    message = 'ISON phone trillian WiZ jarlek Avalon Angel Monstah'
+    assert_irc_message_contains IrcMessage.parse(message), :nickname => 'phone trillian WiZ jarlek Avalon Angel Monstah'
   end
 
   def test_validates_message_recognises_valid_message

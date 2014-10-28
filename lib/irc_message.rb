@@ -85,4 +85,5 @@ module IrcMessageTypes
   USERS_MATCHER = /(:(?<user>\S+) )?(?<type>USERS) (?<target>\S+)/
   WALLOPS_MATCHER = /(:(?<user>\S+) )?(?<type>WALLOPS)( :(?<message>.*))?/
   USERHOST_MATCHER = /(?<type>USERHOST) (?<nickname>.*)/
+  ISON_MATCHER = /(?<type>ISON) (?<nickname>.*)/
 end
