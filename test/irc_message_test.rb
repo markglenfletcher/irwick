@@ -297,8 +297,35 @@ class IrcMessageTest < Minitest::Test
     assert_irc_message_contains IrcMessage.parse(message), :server => 'WiZ'
   end
 
+  def test_validates_message_recognises_valid_message
+    assert_equal false, IrcMessage.validate_message('PASS pass').nil?
+  end
+
+  def test_validates_message_recognises_invalid_message
+    assert_equal true, IrcMessage.validate_message('PASS').nil?
+  end
+
   def test_new_accepts_hash
     refute_nil IrcMessage.new({:user=>"prev", :type=>:nick, :nickname=>"nick", :raw_message=>":prev NICK nick"})
+  end
+
+  def test_to_s_is_correct
+    # PASS
+    assert_equal 'PASS pass', IrcMessage.new(:type => :pass, :pass => 'pass').to_s
+
+    # NICK
+    assert_equal ':prev NICK nick', IrcMessage.new(:type => :nick, :user => 'prev', :nick => 'nick').to_s
+    assert_equal 'NICK nick', IrcMessage.new(:type => :nick, :nick => 'nick').to_s
+    assert_equal ':WiZ!jto@tolsun.oulu.fi NICK Kilroy', IrcMessage.new(:type => :nick, :user => 'WiZ!jto@tolsun.oulu.fi', :nick => 'Kilroy').to_s
+
+  end
+
+  def test_to_s_returns_nil_if_message_invalid
+    assert_equal nil, IrcMessage.new(:type => :nick).to_s
+  end
+
+  def test_to_s_returns_nil_if_expected_field_is_missing
+    assert_equal nil, IrcMessage.new(:nick => 'nick').to_s
   end
 
   private

@@ -2,18 +2,23 @@ require 'ostruct'
 
 class IrcMessage < OpenStruct
   def self.parse(raw_message)
-    IrcMessageTypes.constants.each do |message_regexp|
-      if matches = message_matches(message_regexp, raw_message)
-        attributes = Hash[matches.names.map { |name| [name.to_sym, matches[name.to_sym]] }]
-        return attributes.merge(:type => matches[:type].downcase.to_sym, :raw_message => raw_message)
-      end
+    if matches = validate_message(raw_message)
+      attributes = Hash[matches.names.map { |name| [name.to_sym, matches[name.to_sym]] }]
+      return attributes.merge(:type => matches[:type].downcase.to_sym, :raw_message => raw_message)
+    else
+      return {:type => :unknown, :raw_message => raw_message}
     end
-    return {:type => :unknown, :raw_message => raw_message}
   end
 
   def self.message_matches(message_regexp, message)
     matcher_type = Object.const_get("IrcMessageTypes::#{message_regexp}")
     matcher_type.match message
+  end
+
+  def self.validate_message(message)
+    IrcMessageTypes.constants.map do |message_regexp|
+      IrcMessage.message_matches(message_regexp, message)
+    end.compact.first
   end
 
   def initialize(options = {})
@@ -23,6 +28,17 @@ class IrcMessage < OpenStruct
 
   def method_symbol
     "on_#{type.downcase.to_s}_messages"
+  end
+
+  def to_s
+    message = [
+      user ? ":#{user}" : nil,
+      type.to_s.upcase,
+      pass,
+      nick
+    ].compact.join(' ')
+
+    IrcMessage.validate_message(message) ? message : nil
   end
 end
 
