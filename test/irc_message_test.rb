@@ -3,9 +3,6 @@ require_relative 'test_helper'
 class IrcMessageTest < Minitest::Test
   # def test_message_factory_should_correctly_classify_messages
   #   {
-  #     :SERVLIST
-  #     :SQUERY
-  #     :WHO => ['WHO *.fi','WHO jto* o'],
   #     :WHOWAS => ['WHOWAS Wiz','WHOWAS Mermaid 9','WHOWAS Trillian 1 *.edu'],
   #     :KILL => ['KILL David (csd.bu.edu <- tolsun.oulu.fi)'],
   #     :PING => ['PING tolsun.oulu.fi','PING WiZ'],
@@ -338,6 +335,14 @@ class IrcMessageTest < Minitest::Test
 
     message = 'SQUERY dict@irc.fr :fr2en blaireau'
     assert_irc_message_contains IrcMessage.parse(message), :service => 'dict@irc.fr', :message => 'fr2en blaireau'
+
+    # WHO
+
+    message = 'WHO *.fi'
+    assert_irc_message_contains IrcMessage.parse(message), :mask => '*.fi', :o => nil 
+
+    message = 'WHO jto* o'
+    assert_irc_message_contains IrcMessage.parse(message), :mask => 'jto*', :o => 'o'
 
     # WHOIS
 
