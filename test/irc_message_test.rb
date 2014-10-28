@@ -3,7 +3,6 @@ require_relative 'test_helper'
 class IrcMessageTest < Minitest::Test
   # def test_message_factory_should_correctly_classify_messages
   #   {
-  #     :ADMIN => ['ADMIN tolsun.oulu.fi',':WiZ ADMIN *.edu'],
   #     :INFO => ['INFO csd.bu.edu',':Avalon INFO *.fi','INFO Angel'],
   #     :WHO => ['WHO *.fi','WHO jto* o'],
   #     :WHOIS => ['WHOIS wiz','WHOIS eff.org trillian'],
@@ -306,6 +305,17 @@ class IrcMessageTest < Minitest::Test
     
     message = ':WiZ TRACE AngelDust'
     assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ', :target => 'AngelDust'
+
+    # ADMIN
+
+    message = 'ADMIN tolsun.oulu.fi'
+    assert_irc_message_contains IrcMessage.parse(message), :target => 'tolsun.oulu.fi'
+
+    message = ':WiZ ADMIN *.edu'
+    assert_irc_message_contains IrcMessage.parse(message), :target => '*.edu'
+
+    message = 'ADMIN syrk'
+    assert_irc_message_contains IrcMessage.parse(message), :target => 'syrk'
 
     # PING
     message = 'PING tolsun.oulu.fi'
