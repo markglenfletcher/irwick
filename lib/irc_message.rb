@@ -53,7 +53,7 @@ module IrcMessageTypes
   JOIN_MATCHER = /(:(?<user>\S+) )?(?<type>JOIN) (?<channel>\S+(,\S+)?)( (?<key>\S+))?/
   PART_MATCHER = /(:(?<user>\S+) )?(?<type>PART) (?<channel>\S+(,\S+)?)( :(?<message>.+))?/
   CHANNEL_MODE_MATCHER = /(:(?<user>\S+) )?(?<type>MODE) (?<channel>[#|&]{1}\S+) (?<operator>[+|-]{1})(?<mode>\w{1})( (?<limit>\d+))?( (?<user>\w+))?( (?<banmask>\S+))?/
-  USER_MODE_MATCHER = /(:(?<user>\S+) )?(?<type>MODE)( (?<recipient>\S+))? (?<operator>[+|-]{1})(?<mode>\w{1})/
+  USER_MODE_MATCHER = /(:(?<user>\S+) )?(?<type>MODE)( (?<recipient>\S+))? :(?<operator>[+|-]{1})(?<mode>\w{1})/
   TOPIC_MATCHER = /(:(?<user>\S+) )?(?<type>TOPIC) (?<channel>\S+)( :(?<topic>.*+))?/
   NAMES_MATCHER = /(?<type>NAMES)( (?<channel>\S+))?/
   LIST_MATCHER = /(?<type>LIST)( (?<channel>\S+))?/
@@ -86,4 +86,6 @@ module IrcMessageTypes
   WALLOPS_MATCHER = /(:(?<user>\S+) )?(?<type>WALLOPS)( :(?<message>.*))?/
   USERHOST_MATCHER = /(?<type>USERHOST) (?<nickname>.*)/
   ISON_MATCHER = /(?<type>ISON) (?<nickname>.*)/
+
+  NUMERIC_COMMAND_MATCHER = /:(?<user>\S+) (?<type>\d{3}) (?<recipient>\S+) (?<message>.*)/
 end

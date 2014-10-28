@@ -119,13 +119,13 @@ class IrcMessageTest < Minitest::Test
 
     # MODE User
 
-    message = ':WiZ MODE -w'
+    message = ':WiZ MODE :-w'
     assert_irc_message_contains IrcMessage.parse(message), :user => 'WiZ', :operator => '-', :mode => 'w'
 
-    message = ':Angel MODE Angel +i'
+    message = ':Angel MODE Angel :+i'
     assert_irc_message_contains IrcMessage.parse(message), :user => 'Angel', :recipient => 'Angel', :operator => '+', :mode => 'i'
 
-    message = 'MODE WiZ -o'
+    message = 'MODE WiZ :-o'
     assert_irc_message_contains IrcMessage.parse(message), :recipient => 'WiZ', :operator => '-', :mode => 'o'
 
     # TOPIC
@@ -415,6 +415,11 @@ class IrcMessageTest < Minitest::Test
     assert_irc_message_contains IrcMessage.parse(message), :nickname => 'phone trillian WiZ jarlek Avalon Angel Monstah'
   end
 
+  def test_numeric_messages_processed_correctly
+    message = ':holmes.freenode.net 001 rubybottesting :Welcome to the freenode Internet Relay Chat Network rubybottesting'
+    assert_irc_message_contains IrcMessage.parse(message), :type => :'001', :user => 'holmes.freenode.net', :recipient => 'rubybottesting', :message => ':Welcome to the freenode Internet Relay Chat Network rubybottesting'
+  end
+
   def test_validates_message_recognises_valid_message
     assert_equal false, IrcMessage.validate_message('PASS pass').nil?
   end
@@ -435,7 +440,6 @@ class IrcMessageTest < Minitest::Test
     assert_equal ':prev NICK nick', IrcMessage.new(:type => :nick, :user => 'prev', :nick => 'nick').to_s
     assert_equal 'NICK nick', IrcMessage.new(:type => :nick, :nick => 'nick').to_s
     assert_equal ':WiZ!jto@tolsun.oulu.fi NICK Kilroy', IrcMessage.new(:type => :nick, :user => 'WiZ!jto@tolsun.oulu.fi', :nick => 'Kilroy').to_s
-
   end
 
   def test_to_s_returns_nil_if_message_invalid
