@@ -78,4 +78,5 @@ module IrcMessageTypes
   PING_MATCHER = /(?<type>PING) (?<server>.*)/
   PONG_MATCHER = /(?<type>PONG)( (?<daemon>.*))?/
   ERROR_MATCHER = /(?<type>ERROR) :(?<message>.*)/
+  AWAY_MATCHER = /(:(?<user>\S+) )?(?<type>AWAY)( :(?<message>.*))?/
 end

@@ -3,7 +3,6 @@ require_relative 'test_helper'
 class IrcMessageTest < Minitest::Test
   # def test_message_factory_should_correctly_classify_messages
   #   {
-  #     :AWAY => ['AWAY :Gone to lunch.  Back in 5', ':WiZ AWAY'],
   #     :REHASH => ['REHASH'],
   #     :RESTART => ['RESTART'],
   #     :SUMMON => ['SUMMON jto', 'SUMMON jto tolsun.oulu.fi'],
@@ -382,6 +381,13 @@ class IrcMessageTest < Minitest::Test
     # ERROR
     message = 'ERROR :Server *.fi already exists'
     assert_irc_message_contains IrcMessage.parse(message), :type => :error, :message => 'Server *.fi already exists'
+
+    # AWAY
+    message = 'AWAY :Gone to lunch.  Back in 5'
+    assert_irc_message_contains IrcMessage.parse(message), :type => :away, :message => 'Gone to lunch.  Back in 5'
+
+    message = ':WiZ AWAY'
+    assert_irc_message_contains IrcMessage.parse(message), :type => :away, :user => 'WiZ'
   end
 
   def test_validates_message_recognises_valid_message
