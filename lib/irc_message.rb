@@ -82,4 +82,5 @@ module IrcMessageTypes
   REHASH_MATCHER = /(?<type>REHASH)/
   RESTART_MATCHER = /(?<type>RESTART)/
   SUMMON_MATCHER = /(?<type>SUMMON) (?<recipient>\S+)( (?<target>\S+))?/
+  USERS_MATCHER = /(:(?<user>\S+) )?(?<type>USERS) (?<target>\S+)/
 end
