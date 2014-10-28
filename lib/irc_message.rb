@@ -71,6 +71,7 @@ module IrcMessageTypes
   ADMIN_MATCHER = /(?<type>ADMIN) (?<target>\S+)/
   INFO_MATCHER = /(:(?<user>\S+) )?(?<type>INFO) (?<target>\S+)/
   SQUERY_MATCHER = /(?<type>SQUERY)( (?<service>\S+))?( :(?<message>.*))?/
+  WHOWAS_MATCHER = /(?<type>WHOWAS) (?<nickname>\S+)( (?<count>\d+))?( (?<target>\S+))?/
   WHOIS_MATCHER = /(?<type>WHOIS) (?<target>\S+)( (?<mask>\S+))?/
   WHO_MATCHER = /(?<type>WHO)( (?<mask>\S+))?( (?<o>[o]{1}))?/
   PING_MATCHER = /(?<type>PING) (?<server>.*)/

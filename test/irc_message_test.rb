@@ -3,7 +3,6 @@ require_relative 'test_helper'
 class IrcMessageTest < Minitest::Test
   # def test_message_factory_should_correctly_classify_messages
   #   {
-  #     :WHOWAS => ['WHOWAS Wiz','WHOWAS Mermaid 9','WHOWAS Trillian 1 *.edu'],
   #     :KILL => ['KILL David (csd.bu.edu <- tolsun.oulu.fi)'],
   #     :PING => ['PING tolsun.oulu.fi','PING WiZ'],
   #     :PONG => ['PONG csd.bu.edu tolsun.oulu.fi'],
@@ -351,6 +350,17 @@ class IrcMessageTest < Minitest::Test
 
     message = 'WHOIS eff.org trillian'
     assert_irc_message_contains IrcMessage.parse(message), :target => 'eff.org', :mask => 'trillian'
+
+    # WHOWAS
+
+    message = 'WHOWAS Wiz'
+    assert_irc_message_contains IrcMessage.parse(message), :nickname => 'Wiz'
+
+    message = 'WHOWAS Mermaid 9'
+    assert_irc_message_contains IrcMessage.parse(message), :nickname => 'Mermaid', :count => '9'
+    
+    message = 'WHOWAS Trillian 1 *.edu'
+    assert_irc_message_contains IrcMessage.parse(message), :nickname => 'Trillian', :count => '1', :target => '*.edu'
 
     # PING
     message = 'PING tolsun.oulu.fi'
