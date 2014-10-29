@@ -85,6 +85,19 @@ class NickMessage < IrcMessage
   end
 end
 
+class UserMessage < IrcMessage
+  def initialize(options = {})
+    raise ArgumentError.new('Required arguments not supplied: (nickname,mode,realname)') unless options[:nickname] && options [:mode] && options[:realname]
+    super(options.merge(:type => :user))
+  end
+
+  protected
+
+  def build_message
+    "USER #{nickname} #{mode} * :#{realname}"
+  end
+end
+
 module IrcMessageTypes
   PASS_MATCHER = /(?<type>PASS) (?<password>\S+)/
   NICK_MATCHER = /(:(?<user>\S+) )?(?<type>NICK) (?<nickname>\S+)/
@@ -130,5 +143,5 @@ module IrcMessageTypes
   USERHOST_MATCHER = /(?<type>USERHOST) (?<nickname>.*)/
   ISON_MATCHER = /(?<type>ISON) (?<nickname>.*)/
 
-  GENERIC_IRC_MESSAGE_MATCHER = /:(?<user>\S+) (?<type>\S+) (?<recipient>\S+) (?<message>.*)/
+  GENERIC_IRC_MESSAGE_MATCHER = /(:(?<user>\S+) )?(?<type>\S+) (?<recipient>\S+) (?<message>.*)/
 end
