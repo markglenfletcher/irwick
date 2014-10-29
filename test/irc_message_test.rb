@@ -433,10 +433,6 @@ class IrcMessageTest < Minitest::Test
     assert_equal false, IrcMessage.validate_message('PASS pass').nil?
   end
 
-  def test_validates_message_recognises_invalid_message
-    assert_equal true, IrcMessage.validate_message('PASS').nil?
-  end
-
   def test_new_accepts_hash
     refute_nil IrcMessage.new({:user=>"prev", :type=>:nick, :nickname=>"nick", :raw_message=>":prev NICK nick"})
   end
@@ -492,5 +488,23 @@ class UserMessageTest < Minitest::Test
   def test_to_s_is_correct
     assert_equal 'USER guest 8 * :Ronnie Reagan', UserMessage.new(:nickname => 'guest', :mode => '8', :realname => 'Ronnie Reagan').to_s
     assert_equal 'USER guest 0 * :Ronnie Reagan', UserMessage.new(:nickname => 'guest', :mode => '0', :realname => 'Ronnie Reagan').to_s
+  end
+end
+
+class JoinMessageTest < Minitest::Test
+  def test_new_raises_argument_error_without_necessary_params
+    assert_raises ArgumentError do
+      JoinMessage.new(:key => 'key')
+    end
+  end
+
+  def test_user_is_not_required
+    refute_nil JoinMessage.new(:channel => '#channel')
+  end
+
+  def test_to_s_is_correct
+    assert_equal 'JOIN #channel', JoinMessage.new(:channel => '#channel').to_s
+    assert_equal 'JOIN #channel1,#channel2', JoinMessage.new(:channel => '#channel1,#channel2').to_s
+    assert_equal 'JOIN #channel1,#channel2 key1,key2', JoinMessage.new(:channel => '#channel1,#channel2', :key => 'key1,key2').to_s
   end
 end
