@@ -52,36 +52,31 @@ end
 
 class PassMessage < IrcMessage
   def initialize(options = {})
-    @validator = IrcMessageTypes::PASS_MATCHER
-    @type = :pass
     raise ArgumentError.new('Required arguments not supplied: (password)') unless options[:password]
-    @password = options[:password]
+    super(options.merge(:type => :pass))
+    @validator = IrcMessageTypes::PASS_MATCHER
   end
 
   protected
 
   def build_message
-    "PASS #{@password}"
+    "PASS #{password}"
   end
 end
 
 class NickMessage < IrcMessage
   def initialize(options = {})
-    @validator = IrcMessageTypes::NICK_MATCHER
-    @type = :nick
     raise ArgumentError.new('Required arguments not supplied: (nickname)') unless options[:nickname]
-    @nickname = options[:nickname]
-    @user = options[:user] || nil
+    super(options.merge(:type => :nick))
+    @validator = IrcMessageTypes::NICK_MATCHER
   end
 
   protected
 
   def build_message
     message = ""
-    message << ":#{@user} " if @user
-    message << "NICK "
-    message << "#{@nickname}"
-    message
+    message << ":#{user} " if user
+    message << "NICK #{nickname}"
   end
 end
 
