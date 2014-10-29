@@ -418,6 +418,15 @@ class IrcMessageTest < Minitest::Test
   def test_numeric_messages_processed_correctly
     message = ':holmes.freenode.net 001 rubybottesting :Welcome to the freenode Internet Relay Chat Network rubybottesting'
     assert_irc_message_contains IrcMessage.parse(message), :type => :'001', :user => 'holmes.freenode.net', :recipient => 'rubybottesting', :message => ':Welcome to the freenode Internet Relay Chat Network rubybottesting'
+  
+    message = ":holmes.freenode.net 251 rubybottesting :There are 179 users and 88418 invisible on 30 servers"
+    assert_irc_message_contains IrcMessage.parse(message), :type => :'251', :user => 'holmes.freenode.net', :recipient => 'rubybottesting', :message => ':There are 179 users and 88418 invisible on 30 servers'
+
+    message = ':holmes.freenode.net 252 rubybottesting 31 :IRC Operators online'
+    assert_irc_message_contains IrcMessage.parse(message), :type => :'252', :user => 'holmes.freenode.net', :recipient => 'rubybottesting', :message => '31 :IRC Operators online'
+
+    message = ':holmes.freenode.net 253 rubybottesting 9 :unknown connection(s)'
+    assert_irc_message_contains IrcMessage.parse(message), :type => :'253', :user => 'holmes.freenode.net', :recipient => 'rubybottesting', :message => '9 :unknown connection(s)'
   end
 
   def test_validates_message_recognises_valid_message
@@ -432,27 +441,43 @@ class IrcMessageTest < Minitest::Test
     refute_nil IrcMessage.new({:user=>"prev", :type=>:nick, :nickname=>"nick", :raw_message=>":prev NICK nick"})
   end
 
-  def test_to_s_is_correct
-    # PASS
-    assert_equal 'PASS pass', IrcMessage.new(:type => :pass, :pass => 'pass').to_s
-
-    # NICK
-    assert_equal ':prev NICK nick', IrcMessage.new(:type => :nick, :user => 'prev', :nick => 'nick').to_s
-    assert_equal 'NICK nick', IrcMessage.new(:type => :nick, :nick => 'nick').to_s
-    assert_equal ':WiZ!jto@tolsun.oulu.fi NICK Kilroy', IrcMessage.new(:type => :nick, :user => 'WiZ!jto@tolsun.oulu.fi', :nick => 'Kilroy').to_s
-  end
-
-  def test_to_s_returns_nil_if_message_invalid
-    assert_equal nil, IrcMessage.new(:type => :nick).to_s
-  end
-
-  def test_to_s_returns_nil_if_expected_field_is_missing
-    assert_equal nil, IrcMessage.new(:nick => 'nick').to_s
+  def test_generic_irc_message_to_is_is_valid
+    assert_equal ':user 123 recipient :message', IrcMessage.new(:type => :'123', :user => 'user', :recipient => 'recipient', :message => ':message').to_s
   end
 
   private
 
   def assert_irc_message_contains(irc_message, contents = {})
     contents.each { |k,v| assert_equal v, irc_message[k] }
+  end
+end
+
+class PassMessgeTest < Minitest::Test
+  def test_new_raises_argument_error_without_PASSWORD
+    assert_raises ArgumentError do
+      PassMessage.new
+    end
+  end
+
+  def test_to_s_is_correct
+    assert_equal 'PASS pass', PassMessage.new(:password => 'pass').to_s
+  end
+end
+
+class NickMessageTest < Minitest::Test
+  def test_new_raises_argument_error_with_nickname
+    assert_raises ArgumentError do
+      NickMessage.new
+    end
+  end
+
+  def test_user_is_not_required
+    refute_nil NickMessage.new(:nickname => 'nick')
+  end
+
+  def test_to_s_is_correct
+    assert_equal ':prev NICK nick', NickMessage.new(:user => 'prev', :nickname => 'nick').to_s
+    assert_equal 'NICK nick', NickMessage.new(:nickname => 'nick').to_s
+    assert_equal ':WiZ!jto@tolsun.oulu.fi NICK Kilroy', NickMessage.new(:user => 'WiZ!jto@tolsun.oulu.fi', :nickname => 'Kilroy').to_s
   end
 end

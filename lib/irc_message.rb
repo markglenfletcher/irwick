@@ -1,6 +1,8 @@
 require 'ostruct'
 
 class IrcMessage < OpenStruct
+  attr_reader :validator
+
   def self.parse(raw_message)
     if matches = validate_message(raw_message)
       attributes = Hash[matches.names.map { |name| [name.to_sym, matches[name.to_sym]] }]
@@ -22,6 +24,7 @@ class IrcMessage < OpenStruct
   end
 
   def initialize(options = {})
+    @validator = IrcMessageTypes::GENERIC_IRC_MESSAGE_MATCHER
     options = IrcMessage.parse(options) if options.is_a?(String)
     super(options)
   end
@@ -31,14 +34,54 @@ class IrcMessage < OpenStruct
   end
 
   def to_s
-    message = [
-      user ? ":#{user}" : nil,
-      type.to_s.upcase,
-      pass,
-      nick
-    ].compact.join(' ')
+    new_message = build_message    
+    validator =~ new_message ? new_message : nil
+  end
 
-    IrcMessage.validate_message(message) ? message : nil
+  protected
+
+  def build_message
+    new_message = ""
+    new_message << ":#{user} " if user
+    new_message << "#{type.to_s} "
+    new_message << "#{recipient} " if recipient
+    new_message << "#{message}" if message
+    new_message 
+  end
+end
+
+class PassMessage < IrcMessage
+  def initialize(options = {})
+    @validator = IrcMessageTypes::PASS_MATCHER
+    @type = :pass
+    raise ArgumentError.new('Required arguments not supplied: (password)') unless options[:password]
+    @password = options[:password]
+  end
+
+  protected
+
+  def build_message
+    "PASS #{@password}"
+  end
+end
+
+class NickMessage < IrcMessage
+  def initialize(options = {})
+    @validator = IrcMessageTypes::NICK_MATCHER
+    @type = :nick
+    raise ArgumentError.new('Required arguments not supplied: (nickname)') unless options[:nickname]
+    @nickname = options[:nickname]
+    @user = options[:user] || nil
+  end
+
+  protected
+
+  def build_message
+    message = ""
+    message << ":#{@user} " if @user
+    message << "NICK "
+    message << "#{@nickname}"
+    message
   end
 end
 
@@ -87,5 +130,5 @@ module IrcMessageTypes
   USERHOST_MATCHER = /(?<type>USERHOST) (?<nickname>.*)/
   ISON_MATCHER = /(?<type>ISON) (?<nickname>.*)/
 
-  NUMERIC_COMMAND_MATCHER = /:(?<user>\S+) (?<type>\d{3}) (?<recipient>\S+) (?<message>.*)/
+  GENERIC_IRC_MESSAGE_MATCHER = /:(?<user>\S+) (?<type>\S+) (?<recipient>\S+) (?<message>.*)/
 end
