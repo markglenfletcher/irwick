@@ -508,3 +508,10 @@ class JoinMessageTest < Minitest::Test
     assert_equal 'JOIN #channel1,#channel2 key1,key2', JoinMessage.new(:channel => '#channel1,#channel2', :key => 'key1,key2').to_s
   end
 end
+
+class PongMessageTest < Minitest::Test
+  def test_to_s_is_correct
+    assert_equal 'PONG', PongMessage.new.to_s
+    assert_equal 'PONG server', PongMessage.new(:server => 'server').to_s
+  end
+end

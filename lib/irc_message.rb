@@ -106,6 +106,17 @@ class JoinMessage < IrcMessage
   end
 end
 
+class PongMessage < IrcMessage
+  def initialize(options = {})
+    super(options.merge(:type => :pong))
+    @validator = IrcMessageTypes::PONG_MATCHER
+  end
+
+  def build_message
+    "PONG #{server}".strip
+  end
+end
+
 module IrcMessageTypes
   PASS_MATCHER = /(?<type>PASS) (?<password>\S+)/
   NICK_MATCHER = /(:(?<user>\S+) )?(?<type>NICK) (?<nickname>\S+)/
