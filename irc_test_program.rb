@@ -3,35 +3,20 @@ require 'socket'
 require 'thread'
 
 require_relative 'lib/irc_bot'
+require_relative 'lib/irc_config'
 
 #load plugins
 Dir["#{File.dirname(__FILE__)}/plugins/*_plugin.rb"].each { |f| require f }
 
-def load_config
-  rebuilt_hash = {}
-  JSON.load(File.open('irc_config.json')).each do |k,v|
-    rebuilt_hash[k.to_sym] = v 
-  end
-  rebuilt_remotes = []
-  rebuilt_hash[:remote_servers].each do |h|
-    s_hash = {}
-    h.each do |k,v|
-      s_hash[k.to_sym] = v
-    end
-    rebuilt_remotes << s_hash
-  end
-  rebuilt_hash[:remote_servers] = rebuilt_remotes
-  rebuilt_hash
-end
+# load config
+config_from_file  = JSON.parse(IO.read('irc_config.json'), :symbolize_names => true)
 
-config = load_config
+irc_config = IrcConfig.new(config_from_file)
 
-config[:remote_servers].each do |remote_server|
-  local_config = config.clone
-  remote_server_config = local_config.merge(remote_server)
+# create a socket and spin up a new thread for each irc_server
+irc_config.remote_servers.each do |remote_server|
+  remote_server_config = irc_config.to_hash.merge(remote_server.to_h)
   remote_server_config.delete(:remote_servers)
-
-  puts remote_server_config
 
   Thread.new do
     socket = TCPSocket.new(remote_server[:server_address], remote_server[:port])
@@ -45,4 +30,5 @@ config[:remote_servers].each do |remote_server|
   end
 end
 
+# Wait forever
 gets

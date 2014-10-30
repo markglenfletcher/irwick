@@ -15,7 +15,7 @@ class ToolsPlugin < IrcPlugin
   end
 
   def on_ping_messages(message)
-    pong_message message.daemon
+    pong_message message.server
   end
 
   # Handle registration message
