@@ -13,6 +13,10 @@
       "plugins": [
         "ToolsPlugin",
         "ConsoleLoggerPlugin"
+      ],
+      "channels": [
+        "#orc_tools",
+        "#borc_tools"
       ]
     },
     {
