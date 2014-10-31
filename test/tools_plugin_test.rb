@@ -46,8 +46,8 @@ class ToolsPluginTest < Minitest::Test
   end
 
   def test_responds_to_pong_messages
-    responses = @plugin.on_ping_messages IrcMessage.new('PING server')
-    assert_equal 'PONG', responses
+    responses = @plugin.on_ping_messages IrcMessage.new('PING :server')
+    assert_equal 'PONG :server', responses
   end
 
   def test_responds_to_nick_registered_message
