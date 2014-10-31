@@ -26,7 +26,7 @@ class ToolsPlugin < IrcPlugin
 
   # Handle nickname taken
   def on_462_messages(message)
-    UserMessage.new(:nickname => @options[:second_nick_name], :mode => '8', :realname => @options[:real_name]).to_s
+    UserMessage.new(:nickname => @options[:second_nick_name], :mode => '8', :realname => @options[:real_name])
   end
 
   private
@@ -34,17 +34,17 @@ class ToolsPlugin < IrcPlugin
   def respond_with_registration
     @sent_registration = true
     [
-      PassMessage.new(:password => @options[:pass]).to_s,
-      NickMessage.new(:nickname => @options[:nick_name]).to_s,
-      UserMessage.new(:nickname => @options[:nick_name], :mode => '8', :realname => @options[:real_name]).to_s
+      PassMessage.new(:password => @options[:pass]),
+      NickMessage.new(:nickname => @options[:nick_name]),
+      UserMessage.new(:nickname => @options[:nick_name], :mode => '8', :realname => @options[:real_name])
     ]
   end
 
   def join_channel(channel_name)
-    JoinMessage.new(:channel => channel_name).to_s
+    JoinMessage.new(:channel => channel_name)
   end
 
   def pong_message(server)
-    PongMessage.new(:server => server).to_s
+    PongMessage.new(:server => server)
   end
 end

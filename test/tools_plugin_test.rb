@@ -35,7 +35,7 @@ class ToolsPluginTest < Minitest::Test
     expected_nick_message = 'NICK swarmhorderrndm'
     expected_user_message = 'USER swarmhorderrndm 8 * :Ruby Bot testing'
     responses = @plugin.on_notice_messages IrcMessage.new('NOTICE AUTH :***')
-    assert_equal responses, [expected_pass_message, expected_nick_message, expected_user_message]
+    assert_equal responses.map(&:to_s), [expected_pass_message, expected_nick_message, expected_user_message]
   end
 
   def test_joins_channels_after_registration
@@ -47,11 +47,11 @@ class ToolsPluginTest < Minitest::Test
 
   def test_responds_to_pong_messages
     responses = @plugin.on_ping_messages IrcMessage.new('PING :server')
-    assert_equal 'PONG :server', responses
+    assert_equal 'PONG :server', responses.to_s
   end
 
   def test_responds_to_nick_registered_message
     responses = @plugin.on_462_messages IrcMessage.new(':server 462 user :Unauthorized command (already registered)')
-    assert_equal responses, 'USER swarmhorderrndm2 8 * :Ruby Bot testing'
+    assert_equal 'USER swarmhorderrndm2 8 * :Ruby Bot testing', responses.to_s
   end
 end

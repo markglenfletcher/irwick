@@ -38,10 +38,9 @@ class IrcBot
       plugin.method(:on_all_messages), 
       plugin.method(message.method_symbol.to_sym)
     ]
-    callbacks.map do |callback|
+    callbacks.flat_map do |callback|
       begin
-        response = callback.call(message)
-        response
+        callback.call(message)
       rescue Exception => e
         e
       end
@@ -50,6 +49,6 @@ class IrcBot
 
   def write_to_socket(response)
     puts "[LOG][WRITE] #{response}"
-    @socket.puts response
+    @socket.puts response.to_s
   end
 end
