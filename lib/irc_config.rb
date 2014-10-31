@@ -7,6 +7,8 @@ class IrcConfig
     :host_name,
     :server_name,
     :pass,
+    :owner,
+    :command_key,
     :remote_servers
 
   def initialize(options = {})
@@ -17,6 +19,8 @@ class IrcConfig
     @host_name = options[:host_name]
     @server_name = options[:server_name]
     @pass = options[:pass]
+    @owner = options[:owner]
+    @command_key = options[:command_key]
     @remote_servers = extract_remote_servers options[:remote_servers]
   end
 
@@ -28,6 +32,8 @@ class IrcConfig
       host_name: host_name,
       server_name: server_name,
       pass: pass,
+      owner: owner,
+      command_key: command_key,
       remote_servers: remote_servers.map do |rs|
         {
           server_ref: rs.server_ref,

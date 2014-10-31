@@ -9,6 +9,8 @@ class IrcConfigTest < Minitest::Test
       host_name: "8",
       server_name: "*",
       pass: "*",
+      owner: 'mfmfmfmfmfmf',
+      command_key: '4325642',
       remote_servers: [
         {
           server_ref: 'freenode',
