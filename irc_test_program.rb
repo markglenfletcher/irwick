@@ -19,14 +19,17 @@ irc_config.remote_servers.each do |remote_server|
   remote_server_config.delete(:remote_servers)
 
   Thread.new do
-    socket = TCPSocket.new(remote_server[:server_address], remote_server[:port])
-    begin
-      bot = IrcBot.new(socket, remote_server_config)
-      bot.start
-    ensure
-      puts "[LOGLOG] Socket closed"
-      socket.close
-    end 
+    reload = true
+    while(reload) do
+      socket = TCPSocket.new(remote_server[:server_address], remote_server[:port])
+      begin
+        bot = IrcBot.new(socket, remote_server_config)
+        reload = bot.start
+      ensure
+        puts "[LOGLOG] Socket closed"
+        socket.close
+      end 
+    end
   end
 end
 

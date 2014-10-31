@@ -1,10 +1,12 @@
 {
-  "nick_name": "rubybottesting",
-  "user_name": "rubybottesting",
+  "nick_name": "rubybotmg",
+  "user_name": "rubybotmg",
   "real_name": "Ruby Bot testing",
   "host_name": 8,
   "server_name": "*",
   "pass": "*",
+  "owner": "mfmfmfmfmfmf",
+  "command_key": "123",
   "remote_servers": [
     {
       "server_ref": "freenode",
@@ -12,20 +14,12 @@
       "port": 6667,
       "plugins": [
         "ToolsPlugin",
+        "ControlPlugin",
         "ConsoleLoggerPlugin"
       ],
       "channels": [
         "#orc_tools",
         "#borc_tools"
-      ]
-    },
-    {
-      "server_ref": "efnet",
-      "server_address": "irc.du.se",
-      "port": 6667,
-      "plugins": [
-        "ToolsPlugin",
-        "ConsoleLoggerPlugin"
       ]
     }
   ]
