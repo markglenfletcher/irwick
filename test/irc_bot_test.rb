@@ -2,7 +2,7 @@ require_relative 'test_helper'
 
 class IrcBotTest < Minitest::Test
   def setup
-    @socket = Minitest::Mock.new
+    @socket = mock('socket')
 
     @irc_message = MockMessage.new
     @irc_message.stubs(type: :PRIVMSG, method_symbol: "on_privmsg_messages")
@@ -56,6 +56,75 @@ class IrcBotTest < Minitest::Test
     bot.plugins << @plugin
 
     assert_equal [@plugin_responses[0], exception], bot.notify_plugins(@irc_message)
+  end
+
+  def test_handles_irc_message_from_plugin
+    message = PongMessage.new(:server => 'server')
+
+    bot = IrcBot.new(@socket)
+    bot.expects(:write_to_socket).with(message)
+
+    bot.handle_responses [message]
+  end
+
+  def test_handles_string_message_from_plugin
+    message = 'PONG :server'
+
+    bot = IrcBot.new(@socket)
+    bot.expects(:write_to_socket).with(message)
+
+    bot.handle_responses [message]
+  end
+
+  def test_handles_control_message_from_plugin
+    message = ControlMessage.new(:disconnect)
+
+    bot = IrcBot.new(@socket)
+    bot.expects(:execute_control_message).with(message)
+
+    bot.handle_responses [message]
+  end
+
+  def test_executes_the_correct_function_from_control_message
+    message = ControlMessage.new(:disconnect)
+
+    bot = IrcBot.new(@socket)
+    bot.expects(:disconnect)
+
+    bot.execute_control_message message
+  end
+
+  def test_execute_control_message_handles_absent_control_method
+    message = ControlMessage.new(:non_existant_ctrl_method)
+    bot = IrcBot.new(@socket)
+    bot.execute_control_message message
+  end
+
+  def test_bot_terminates_with_false_reload_flag_when_disconnected
+    @socket.expects(:puts).with('QUIT')
+    irc_bot = IrcBot.new(@socket)
+
+    irc_bot.send(:disconnect)
+
+    assert_equal false, irc_bot.start
+  end
+
+  def test_bot_terminates_with_true_reload_flag_when_reloaded
+    @socket.expects(:puts).with('QUIT')
+    irc_bot = IrcBot.new(@socket)
+
+    irc_bot.send(:reload)
+
+    assert_equal true, irc_bot.start
+  end
+
+  def test_bot_shutsdown_gracefully
+    irc_bot = IrcBot.new(@socket)
+
+    irc_bot.send(:disconnect)
+    irc_bot.expects(:write_to_socket).with('QUIT')
+
+    irc_bot.start
   end
 end
 
