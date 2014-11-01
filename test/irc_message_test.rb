@@ -515,3 +515,15 @@ class PongMessageTest < Minitest::Test
     assert_equal 'PONG server', PongMessage.new(:server => 'server').to_s
   end
 end
+
+class PrivMessageTest < Minitest::Test
+  def test_new_raises_argument_error_without_necessary_params
+    assert_raises ArgumentError do
+      PrivMessage.new
+    end
+  end
+
+  def test_to_s_is_correct
+    assert_equal 'PRIVMSG user :My Message', PrivMessage.new(:recipient => 'user', :message => 'My Message').to_s
+  end
+end

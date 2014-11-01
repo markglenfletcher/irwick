@@ -117,6 +117,20 @@ class PongMessage < IrcMessage
   end
 end
 
+class PrivMessage < IrcMessage
+  def initialize(options = {})
+    raise ArgumentError.new('Required arguments not supplied: (recipient,message)') unless options[:recipient] && options[:message]
+    super(options.merge(:type => :privmsg))
+    validator = IrcMessageTypes::PRIVMSG_MATCHER
+  end
+
+  protected
+
+  def build_message
+    "PRIVMSG #{recipient} :#{message}"
+  end
+end
+
 module IrcMessageTypes
   PASS_MATCHER = /(?<type>PASS) (?<password>\S+)/
   NICK_MATCHER = /(:(?<user>\S+) )?(?<type>NICK) (?<nickname>\S+)/
