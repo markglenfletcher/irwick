@@ -1,15 +1,9 @@
-require 'json'
-require 'socket'
-require 'thread'
+#!/usr/bin/env ruby
 
-require_relative 'lib/irc_bot'
-require_relative 'lib/irc_config'
-
-#load plugins
-Dir["#{File.dirname(__FILE__)}/plugins/*_plugin.rb"].each { |f| require f }
+require 'irwick'
 
 # load config
-config_from_file  = JSON.parse(IO.read('irc_config.json'), :symbolize_names => true)
+config_from_file  = JSON.parse(IO.read("#{File.dirname(__FILE__)}/../config/irwick_config.json"), :symbolize_names => true)
 
 irc_config = IrcConfig.new(config_from_file)
 
@@ -21,10 +15,13 @@ irc_config.remote_servers.each do |remote_server|
   Thread.new do
     reload = true
     while(reload) do
+      reload = false
       socket = TCPSocket.new(remote_server[:server_address], remote_server[:port])
       begin
         bot = IrcBot.new(socket, remote_server_config)
         reload = bot.start
+      rescue => e
+        puts e.inspect
       ensure
         puts "[LOGLOG] Socket closed"
         socket.close

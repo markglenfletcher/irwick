@@ -1,5 +1,3 @@
-require_relative '../lib/control_message'
-
 class ControlPlugin < IrcPlugin
   def initialize(options = {})
     @bot_name = options[:nick_name]

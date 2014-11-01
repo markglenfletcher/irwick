@@ -1,5 +1,3 @@
-require_relative '../lib/irc_plugin'
-
 class ToolsPlugin < IrcPlugin
   attr_reader :registered, :sent_registration
 

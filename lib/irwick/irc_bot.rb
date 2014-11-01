@@ -1,7 +1,3 @@
-require_relative 'irc_plugin'
-require_relative 'irc_message'
-require_relative 'control_message'
-
 class IrcBot
   attr_reader :socket
   attr_accessor :plugins

@@ -1,3 +1,5 @@
+require_relative 'test_helper'
+
 class ToolsPluginTest < Minitest::Test
   def setup
     @options = {
