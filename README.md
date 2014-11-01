@@ -73,16 +73,13 @@ Return an individual IrcMessage or an array:
 
 ```ruby
 def on_join_messages(message)
-  IrcMessage.new(
-    :type => :privmsg,
-    :recipient => message.channel,
-    :message => 'Welcome')
+  PrivMessage.new(:recipient => message.channel, :message => 'Welcome')
 end
 
 def on_privmsg_messages(message)
   [
-    IrcMessage.new(:type => :privmsg, :recipient => message.recipient, :message => 'Read this!'),
-    IrcMessage.new(:type => :privmsg, :recipient => message.recipient, :message => 'Read this too!')
+    PrivMessage.new(:recipient => message.recipient, :message => 'Read this!'),
+    PrivMessage.new(:recipient => message.recipient, :message => 'Read this too!')
   ]
 end
 ```
