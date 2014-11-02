@@ -1,10 +1,22 @@
 #!/usr/bin/env ruby
+require 'optparse'
 
 require 'irwick'
 require 'irc_tools'
 
+options = {
+  :config => "#{File.dirname(__FILE__)}/../config/irwick_config.json"
+}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: irwick [options]"
+  opts.on("--config FILE", "Config file to use") do |file|
+    options[:config] = file
+  end
+end.parse!
+
 # load config
-config_from_file  = JSON.parse(IO.read("#{File.dirname(__FILE__)}/../config/irwick_config.json"), :symbolize_names => true)
+config_from_file  = JSON.parse(IO.read(options[:config]), :symbolize_names => true)
 
 irc_config = IrcConfig.new(config_from_file)
 
