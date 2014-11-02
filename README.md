@@ -6,10 +6,10 @@ The irwick and irc_tools projects aim to make creating, reading and sending mess
 
 ## Installation
 
-Clone project
-Add plugins
-Package
-Install where needed
+- Clone project
+- Add plugins
+- gem build irwick.gemspec
+- Install where needed
 
 ## Configuration
 
