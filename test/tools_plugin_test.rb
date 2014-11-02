@@ -23,12 +23,12 @@ class ToolsPluginTest < Minitest::Test
 
   def test_registered_after_registration_message_received
     registration_received = ':holmes.freenode.net 001 rubybottesting :Welcome to the freenode Internet Relay Chat Network rubybottesting'
-    @plugin.on_001_messages IrcMessage.new(registration_received)
+    @plugin.on_001_messages registration_received
     assert_equal true, @plugin.registered
   end
 
   def test_responds_with_registration_when_initial_notice_received
-    @plugin.on_notice_messages IrcMessage.new('NOTICE AUTH :***')
+    @plugin.on_notice_messages 'NOTICE AUTH :***'
     assert_equal true, @plugin.sent_registration
   end
 
@@ -36,7 +36,7 @@ class ToolsPluginTest < Minitest::Test
     expected_pass_message = 'PASS *'
     expected_nick_message = 'NICK swarmhorderrndm'
     expected_user_message = 'USER swarmhorderrndm 8 * :Ruby Bot testing'
-    responses = @plugin.on_notice_messages IrcMessage.new('NOTICE AUTH :***')
+    responses = @plugin.on_notice_messages 'NOTICE AUTH :***'
     assert_equal responses.map(&:to_s), [expected_pass_message, expected_nick_message, expected_user_message]
   end
 
@@ -48,12 +48,10 @@ class ToolsPluginTest < Minitest::Test
   end
 
   def test_responds_to_pong_messages
-    responses = @plugin.on_ping_messages IrcMessage.new('PING :server')
-    assert_equal 'PONG :server', responses.to_s
-  end
+    message = mock('message')
+    message.expects(:server).returns('server')
 
-  def test_responds_to_nick_registered_message
-    responses = @plugin.on_462_messages IrcMessage.new(':server 462 user :Unauthorized command (already registered)')
-    assert_equal 'USER swarmhorderrndm2 8 * :Ruby Bot testing', responses.to_s
+    responses = @plugin.on_ping_messages message
+    assert_equal 'PONG :server', responses.to_s
   end
 end

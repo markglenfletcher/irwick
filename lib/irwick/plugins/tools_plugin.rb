@@ -1,3 +1,5 @@
+require 'irc_tools'
+
 class ToolsPlugin < IrcPlugin
   attr_reader :registered, :sent_registration
 
@@ -22,27 +24,22 @@ class ToolsPlugin < IrcPlugin
     @options[:channels].map { |channel| join_channel(channel) }
   end
 
-  # Handle nickname taken
-  def on_462_messages(message)
-    UserMessage.new(:nickname => @options[:second_nick_name], :mode => '8', :realname => @options[:real_name])
-  end
-
   private
 
   def respond_with_registration
     @sent_registration = true
     [
-      PassMessage.new(:password => @options[:pass]),
-      NickMessage.new(:nickname => @options[:nick_name]),
-      UserMessage.new(:nickname => @options[:nick_name], :mode => '8', :realname => @options[:real_name])
+      IrcTools::PassMessage.new(:password => @options[:pass]),
+      IrcTools::NickMessage.new(:nickname => @options[:nick_name]),
+      IrcTools::UserMessage.new(:nickname => @options[:nick_name], :mode => '8', :realname => @options[:real_name])
     ]
   end
 
   def join_channel(channel_name)
-    JoinMessage.new(:channel => channel_name)
+    IrcTools::JoinMessage.new(:channel => channel_name)
   end
 
   def pong_message(server)
-    PongMessage.new(:server => server)
+    IrcTools::PongMessage.new(:server => server)
   end
 end

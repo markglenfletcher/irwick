@@ -59,7 +59,7 @@ class IrcBotTest < Minitest::Test
   end
 
   def test_handles_irc_message_from_plugin
-    message = PongMessage.new(:server => 'server')
+    message = IrcTools::PongMessage.new(:server => 'server')
 
     bot = IrcBot.new(@socket)
     bot.expects(:write_to_server).with(message)

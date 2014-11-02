@@ -24,22 +24,33 @@ class ControlPluginTest < Minitest::Test
   end
 
   def test_valid_command_message_recognised
-    message = IrcMessage.new(':mfmfmfmfmfmf!~mfmfmfmfm@31.55.24.2 PRIVMSG #orc_tools :swarmhorderrndm reload 4325642')
+    message = mock('message')
+    message.expects(:user).returns('mfmfmfmfmfmf!~mfmfmfmfm@31.55.24.2')
+    message.expects(:message).returns('swarmhorderrndm reload 4325642')
+
     assert_equal 'reload', @plugin.valid_command_message?(message)
   end
 
   def test_invalid_command_message_recognised
-    message = IrcMessage.new(':mfmfmfmfmfmf!~mfmfmfmfm@31.55.24.2 PRIVMSG #orc_tools :swarmhorderrndm reload incorrect_key')
+    message = mock('message')
+    message.expects(:user).returns('mfmfmfmfmfmf!~mfmfmfmfm@31.55.24.2')
+    message.expects(:message).returns('swarmhorderrndm reload incorrect_key')
+
     assert_equal false, @plugin.valid_command_message?(message)
   end
 
   def test_creates_the_correct_command_message
-    message = IrcMessage.new(':mfmfmfmfmfmf!~mfmfmfmfm@31.55.24.2 PRIVMSG #orc_tools :swarmhorderrndm disconnect 4325642')
+    message = mock('message')
+    message.expects(:user).returns('mfmfmfmfmfmf!~mfmfmfmfm@31.55.24.2')
+    message.expects(:message).returns('swarmhorderrndm disconnect 4325642')
+
     assert_equal :disconnect, @plugin.on_privmsg_messages(message).method
   end
 
   def test_ignores_other_messages
-    message = IrcMessage.new(':mfmfmfmfmfmf!~mfmfmfmfm@31.55.24.2 PRIVMSG #orc_tools :hi')
+    message = mock('message')
+    message.expects(:message).returns('hi')
+
     assert_equal nil, @plugin.on_privmsg_messages(message)
   end
 end

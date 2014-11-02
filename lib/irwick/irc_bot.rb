@@ -80,7 +80,7 @@ class IrcBot
 
   def read_from_server
     unless @terminate
-      IrcMessage.new server.read
+      IrcTools::Message.new server.read
     else
       false
     end
