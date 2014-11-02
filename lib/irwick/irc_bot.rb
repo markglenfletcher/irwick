@@ -1,17 +1,18 @@
 class IrcBot
-  attr_reader :socket
+  attr_reader :server
   attr_accessor :plugins
 
-  def initialize(socket, options = {})
+  def initialize(server, options = {})
     @terminate,@reload_bot = false,false
-    @socket = socket
+    @server = server
     @options = options
     @plugins = load_plugins(options[:plugins] || [])
   end
 
   def start
     begin
-      while message = read_from_socket
+      server.connect
+      while message = read_from_server
         plugin_responses = notify_plugins message
         handle_responses plugin_responses
       end
@@ -32,7 +33,7 @@ class IrcBot
       if response.is_a?(ControlMessage)
         execute_control_message response
       else 
-        write_to_socket response
+        write_to_server response
       end
     end
   end
@@ -77,20 +78,21 @@ class IrcBot
     [:disconnect, :reload].include?(method)
   end
 
-  def read_from_socket
+  def read_from_server
     unless @terminate
-      IrcMessage.new @socket.gets
+      IrcMessage.new server.read
     else
       false
     end
   end
 
-  def write_to_socket(response)
-    @socket.puts response.to_s
+  def write_to_server(response)
+    server.write response.to_s
   end
 
   def shutdown
-    write_to_socket("QUIT")
+    write_to_server("QUIT")
+    server.disconnect
   end
 
   def reload

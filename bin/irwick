@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'irwick'
+require 'irc_tools'
 
 # load config
 config_from_file  = JSON.parse(IO.read("#{File.dirname(__FILE__)}/../config/irwick_config.json"), :symbolize_names => true)
@@ -16,15 +17,15 @@ irc_config.remote_servers.each do |remote_server|
     reload = true
     while(reload) do
       reload = false
-      socket = TCPSocket.new(remote_server[:server_address], remote_server[:port])
+      server = IrcTools::Server.new(remote_server[:server_address], remote_server[:port])
       begin
-        bot = IrcBot.new(socket, remote_server_config)
+        bot = IrcBot.new(server, remote_server_config)
         reload = bot.start
       rescue => e
         puts e.inspect
       ensure
         puts "[LOGLOG] Socket closed"
-        socket.close
+        server.disconnect
       end 
     end
   end

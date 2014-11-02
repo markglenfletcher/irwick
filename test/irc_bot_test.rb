@@ -62,7 +62,7 @@ class IrcBotTest < Minitest::Test
     message = PongMessage.new(:server => 'server')
 
     bot = IrcBot.new(@socket)
-    bot.expects(:write_to_socket).with(message)
+    bot.expects(:write_to_server).with(message)
 
     bot.handle_responses [message]
   end
@@ -71,7 +71,7 @@ class IrcBotTest < Minitest::Test
     message = 'PONG :server'
 
     bot = IrcBot.new(@socket)
-    bot.expects(:write_to_socket).with(message)
+    bot.expects(:write_to_server).with(message)
 
     bot.handle_responses [message]
   end
@@ -101,7 +101,9 @@ class IrcBotTest < Minitest::Test
   end
 
   def test_bot_terminates_with_false_reload_flag_when_disconnected
-    @socket.expects(:puts).with('QUIT')
+    @socket.expects(:write).with('QUIT')
+    @socket.expects(:connect)
+    @socket.expects(:disconnect)
     irc_bot = IrcBot.new(@socket)
 
     irc_bot.send(:disconnect)
@@ -110,7 +112,9 @@ class IrcBotTest < Minitest::Test
   end
 
   def test_bot_terminates_with_true_reload_flag_when_reloaded
-    @socket.expects(:puts).with('QUIT')
+    @socket.expects(:write).with('QUIT')
+    @socket.expects(:connect)
+    @socket.expects(:disconnect)
     irc_bot = IrcBot.new(@socket)
 
     irc_bot.send(:reload)
@@ -120,9 +124,11 @@ class IrcBotTest < Minitest::Test
 
   def test_bot_shutsdown_gracefully
     irc_bot = IrcBot.new(@socket)
+    @socket.expects(:connect)
+    @socket.expects(:disconnect)
 
     irc_bot.send(:disconnect)
-    irc_bot.expects(:write_to_socket).with('QUIT')
+    irc_bot.expects(:write_to_server).with('QUIT')
 
     irc_bot.start
   end
