@@ -128,7 +128,7 @@ class IrcBotTest < Minitest::Test
     @socket.expects(:disconnect)
 
     irc_bot.send(:disconnect)
-    irc_bot.expects(:write_to_server).with('QUIT')
+    irc_bot.expects(:write_to_server).with(IrcTools::QuitMessage.new)
 
     irc_bot.start
   end

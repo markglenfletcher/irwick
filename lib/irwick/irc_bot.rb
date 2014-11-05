@@ -87,11 +87,12 @@ class IrcBot
   end
 
   def write_to_server(response)
+    puts response.to_s
     server.write response.to_s
   end
 
   def shutdown
-    write_to_server("QUIT")
+    write_to_server(IrcTools::QuitMessage.new)
     server.disconnect
   end
 
