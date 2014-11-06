@@ -87,7 +87,6 @@ class IrcBot
   end
 
   def write_to_server(response)
-    puts response.to_s
     server.write response.to_s
   end
 
