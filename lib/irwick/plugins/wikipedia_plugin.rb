@@ -11,6 +11,9 @@ class WikipediaPlugin < IrcPlugin
   end
 
   def respond_to_trigger(query)
-    
+    WikipediaCall.query(query)
   end
+end
+
+class WikipediaCall
 end
