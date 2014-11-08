@@ -15,7 +15,8 @@
       "plugins": [
         "ToolsPlugin",
         "ControlPlugin",
-        "ConsoleLoggerPlugin"
+        "ConsoleLoggerPlugin",
+        "WikipediaPlugin"
       ],
       "channels": [
         "#orc_tools",
