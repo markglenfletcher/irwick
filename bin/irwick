@@ -31,13 +31,11 @@ irc_config.remote_servers.each do |remote_server|
       reload = false
       server = IrcTools::Server.new(remote_server[:server_address], remote_server[:port])
       begin
-        bot = IrcBot.new(server, remote_server_config)
-        reload = bot.start
+        reload = IrcBot.new(server, remote_server_config).start
       rescue => e
         puts e.inspect
       ensure
         puts "[LOGLOG] Socket closed"
-        server.disconnect
       end 
     end
   end
